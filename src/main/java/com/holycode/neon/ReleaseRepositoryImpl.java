@@ -1,60 +1,78 @@
 package com.holycode.neon;
 
 import com.holycode.neon.models.Release;
-import com.holycode.neon.models.ReleaseSearchFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Repository
 @Transactional
-public class ReleaseRepositoryImpl implements ReleaseRepositoryCustom {
+public class ReleaseRepositoryImpl<T> implements ReleaseRepositoryCustom<T> {
+
+    private static Logger log = LoggerFactory.getLogger(ReleaseRepositoryImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<Release> findUsingSearchFilter(ReleaseSearchFilter releaseSearchFilter) {
+    public List<Release> findUsingSearchFilter(T searchFilter) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Release> criteriaQuery = criteriaBuilder.createQuery(Release.class);
         Root<Release> release = criteriaQuery.from(Release.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        if (releaseSearchFilter.getStatusIn() != null) {
-            predicates.add(release.get("status").in(releaseSearchFilter.getStatusIn()));
-        }
 
-        if (releaseSearchFilter.getReleaseDateFrom() != null){
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(release.get("releaseDate"), releaseSearchFilter.getReleaseDateFrom()));
-        }
+        Field[] fields = searchFilter.getClass().getDeclaredFields();
 
-        if (releaseSearchFilter.getReleaseDateTo() != null){
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(release.get("releaseDate"), releaseSearchFilter.getReleaseDateTo()));
-        }
+        Arrays.asList(fields).stream().forEach( field -> {
+            try {
+                Object value = new PropertyDescriptor(field.getName(), searchFilter.getClass()).getReadMethod().invoke(searchFilter);
+                if (value != null) {
+                    Class<?> type = field.getType();
 
-        if (releaseSearchFilter.getCreatedAtFrom() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(release.get("createdAt"), releaseSearchFilter.getCreatedAtFrom()));
-        }
+                    if (type.equals(Date.class)) {
+                        String fieldName = field.getName();
+                        if (fieldName.endsWith("From")) {
+                            predicates.add(criteriaBuilder.greaterThanOrEqualTo(release.get(fieldName.substring(0,fieldName.indexOf("From"))), (Date)value));
+                        } else if (field.getName().endsWith("To")) {
+                            predicates.add(criteriaBuilder.lessThanOrEqualTo(release.get(fieldName.substring(0,fieldName.indexOf("To"))), (Date)value));
+                        } else {
+                            predicates.add(criteriaBuilder.equal(release.get(fieldName), value));
+                        }
+                    }
 
-        if (releaseSearchFilter.getCreatedAtTo() != null) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(release.get("createdAt"), releaseSearchFilter.getCreatedAtTo()));
-        }
+                    if (type.equals(List.class)){
+//                        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+//                        Class<?> someClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                        //this assumes any List<T> field in searchFilter with xxxIn can be used with Predicate 'in'
+                        //TODO: improve
+                        predicates.add(release.get(field.getName().substring(0,field.getName().indexOf("In"))).in(value));
+                    }
+                }
 
-        if (releaseSearchFilter.getLastUpdateAtFrom() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(release.get("lastUpdateAt"), releaseSearchFilter.getLastUpdateAtFrom()));
-        }
+            } catch (IllegalAccessException | InvocationTargetException | IntrospectionException e) {
+                log.error(e.getLocalizedMessage());
+            }
+        });
 
-        if (releaseSearchFilter.getLastUpdateAtTo() != null) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(release.get("lastUpdateAt"), releaseSearchFilter.getLastUpdateAtTo()));
-        }
-
-        Predicate where =  criteriaBuilder.and(predicates.toArray(new Predicate[0])); //and(statusIn, releaseDateFrom, releaseDateTo, createdAtFrom, createdAtTo, lastUpdateFrom, lastUpdateTo);
+        Predicate where =  criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 
         criteriaQuery.select(release);
         criteriaQuery.where(where);
