@@ -3,6 +3,7 @@ package com.holycode.neon;
 import com.holycode.neon.exceptions.ReleaseNotFoundException;
 import com.holycode.neon.models.Release;
 import com.holycode.neon.models.ReleaseDTO;
+import com.holycode.neon.models.ReleaseSearchFilter;
 import com.holycode.neon.util.DTOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +23,15 @@ public class ReleaseService {
     @Autowired
     private DTOMapper dtoMapper;
 
-    public List<ReleaseDTO> getReleases() {
-        return dtoMapper.mapAllToDTO(releaseRepo.findAll());
+    public List<ReleaseDTO> getReleases(ReleaseSearchFilter releaseSearchFilter) {
+        // releaseSearchFilter is never null
+        // List<Release> result = releaseSearchFilter != null ? releaseRepo.findUsingSearchFilter(releaseSearchFilter) : releaseRepo.findAll();
+        return dtoMapper.mapAllToDTO(releaseRepo.findUsingSearchFilter(releaseSearchFilter));
     }
 
     public ReleaseDTO getRelease(String id) throws ReleaseNotFoundException {
         long lid = Long.valueOf(id);
-        Release release = releaseRepo.findById(lid).orElseThrow(() -> new ReleaseNotFoundException());
+        Release release = releaseRepo.findById(lid).orElseThrow(ReleaseNotFoundException::new);
         return dtoMapper.mapToDTO(release);
     }
 
@@ -46,7 +49,7 @@ public class ReleaseService {
         boolean deleted = false;
         try {
             long lid = Long.valueOf(id);
-            Release release = releaseRepo.findById(lid).orElseThrow(() -> new ReleaseNotFoundException());
+            Release release = releaseRepo.findById(lid).orElseThrow(ReleaseNotFoundException::new);
             releaseRepo.delete(release);
             deleted = true;
         } catch (Exception e) {

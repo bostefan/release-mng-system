@@ -2,6 +2,7 @@ package com.holycode.neon;
 
 import com.holycode.neon.exceptions.ReleaseNotFoundException;
 import com.holycode.neon.models.ReleaseDTO;
+import com.holycode.neon.models.ReleaseSearchFilter;
 import com.holycode.neon.models.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +25,14 @@ public class ReleaseController {
     private ReleaseService releaseService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ReleaseDTO> list(){
-        return releaseService.getReleases();
+    public List<ReleaseDTO> list(@ModelAttribute ReleaseSearchFilter releaseSearchFilter){
+        return releaseService.getReleases(releaseSearchFilter);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getRelease(@PathVariable String id){
         try {
-            return new ResponseEntity<ReleaseDTO>(releaseService.getRelease(id), HttpStatus.OK);
+            return new ResponseEntity<>(releaseService.getRelease(id), HttpStatus.OK);
         } catch (ReleaseNotFoundException e) {
             log.error(e.getLocalizedMessage());
         }
@@ -42,7 +43,7 @@ public class ReleaseController {
     public ResponseEntity<?> create(@Valid @RequestBody ReleaseDTO release){
 
         boolean created = releaseService.create(release);
-        ResponseEntity<?> result = null;
+        ResponseEntity<?> result;
         if(created) {
             result = new ResponseEntity<>(new Response("Created", "Successfully created release named " + release.getName()), HttpStatus.OK);
         } else {
@@ -55,7 +56,7 @@ public class ReleaseController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@Valid @RequestBody ReleaseDTO release){
         boolean updated = releaseService.update(release);
-        ResponseEntity<?> result = null;
+        ResponseEntity<?> result;
         if(updated) {
             result = new ResponseEntity<>(new Response("Updated", "Successfully updated release " + release.getId()), HttpStatus.OK);
         } else {
@@ -67,7 +68,7 @@ public class ReleaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> delete(@PathVariable String id){
         boolean deleted = releaseService.delete(id);
-        ResponseEntity<?> result = null;
+        ResponseEntity<?> result;
         if(deleted) {
             result = new ResponseEntity<>(new Response("Deleted", "Successfully deleted release " + id), HttpStatus.OK);
         } else {
