@@ -1,5 +1,6 @@
 package com.holycode.neon;
 
+import com.holycode.neon.controller.ReleaseController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

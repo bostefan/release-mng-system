@@ -1,9 +1,10 @@
-package com.holycode.neon;
+package com.holycode.neon.service;
 
 import com.holycode.neon.exceptions.ReleaseNotFoundException;
 import com.holycode.neon.models.Release;
 import com.holycode.neon.models.ReleaseDTO;
 import com.holycode.neon.models.ReleaseSearchFilter;
+import com.holycode.neon.repository.ReleaseRepository;
 import com.holycode.neon.util.DTOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

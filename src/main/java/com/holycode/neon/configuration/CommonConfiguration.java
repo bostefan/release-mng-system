@@ -1,4 +1,4 @@
-package com.holycode.neon;
+package com.holycode.neon.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

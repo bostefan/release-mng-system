@@ -1,4 +1,4 @@
-package com.holycode.neon;
+package com.holycode.neon.repository;
 
 import com.holycode.neon.models.Release;
 import org.springframework.data.jpa.repository.JpaRepository;
