@@ -20,6 +20,13 @@ public class ReleaseDTO {
     public ReleaseDTO() {
     }
 
+    public ReleaseDTO(Long id, String name, String description, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
+
     public ReleaseDTO(Long id, String name, String description, String status, Date releaseDate, Date createdAt, Date lastUpdateAt) {
         this.id = id;
         this.name = name;

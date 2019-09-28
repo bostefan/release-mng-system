@@ -23,9 +23,11 @@ public class ReleaseService {
     @Autowired
     private DTOMapper dtoMapper;
 
+    public List<ReleaseDTO> getAllReleases() {
+        return dtoMapper.mapAllToDTO(releaseRepo.findAll());
+    }
+
     public List<ReleaseDTO> getReleases(ReleaseSearchFilter releaseSearchFilter) {
-        // releaseSearchFilter is never null
-        // List<Release> result = releaseSearchFilter != null ? releaseRepo.findUsingSearchFilter(releaseSearchFilter) : releaseRepo.findAll();
         return dtoMapper.mapAllToDTO(releaseRepo.findUsingSearchFilter(releaseSearchFilter));
     }
 

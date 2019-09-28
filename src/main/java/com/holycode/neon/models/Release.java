@@ -28,6 +28,13 @@ public class Release {
     public Release() {
     }
 
+    public Release(Long id, String status, String name, String description) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.description = description;
+    }
+
     public Release(Long id, String name, String description, String status, Date releaseDate, Date createdAt, Date lastUpdateAt) {
         this.id = id;
         this.name = name;

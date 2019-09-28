@@ -2,6 +2,7 @@ package com.holycode.neon.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,10 @@ public class ReleaseSearchFilter {
     private Date lastUpdateAtTo;
 
     public ReleaseSearchFilter() {
+    }
+
+    public ReleaseSearchFilter(List<String> statusIn) {
+        this.statusIn = statusIn;
     }
 
     public ReleaseSearchFilter(String nameLike, List<String> statusIn, Date releaseDateFrom, Date releaseDateTo, Date createdAtFrom, Date createdAtTo, Date lastUpdateAtFrom, Date lastUpdateAtTo) {
@@ -99,5 +104,26 @@ public class ReleaseSearchFilter {
 
     public void setLastUpdateAtTo(Date lastUpdateAtTo) {
         this.lastUpdateAtTo = lastUpdateAtTo;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        ReleaseSearchFilter compared = (ReleaseSearchFilter) obj;
+        boolean name = equalsWithNulls(this.name, compared.getName());
+        boolean statusIn = equalsWithNulls(this.getStatusIn(), compared.getStatusIn()) && Arrays.equals(this.getStatusIn() != null ? this.getStatusIn().toArray() : null, compared.getStatusIn()!= null ? compared.getStatusIn().toArray() : null);
+        boolean releaseDateFrom = equalsWithNulls(this.releaseDateFrom, compared.getReleaseDateFrom());
+        boolean releaseDateTo = equalsWithNulls(this.releaseDateTo, compared.getReleaseDateTo());
+        boolean createdAtFrom = equalsWithNulls(this.createdAtFrom, compared.getCreatedAtFrom());
+        boolean createdAtTo = equalsWithNulls(this.createdAtTo,compared.getCreatedAtTo());
+        boolean lastUpdateAtFrom = equalsWithNulls(this.lastUpdateAtFrom, compared.getLastUpdateAtFrom());
+        boolean lastUpdateAtTo = equalsWithNulls(this.lastUpdateAtTo, compared.getLastUpdateAtTo());
+        return name && statusIn && releaseDateFrom && releaseDateTo && createdAtFrom && createdAtTo && lastUpdateAtFrom && lastUpdateAtTo;
+    }
+
+    public static boolean equalsWithNulls(Object first, Object second) {
+        if (first == null && second == null) return true;
+        if (first == second) return true;
+        if ((first == null)||(second == null)) return false;
+        return first.equals(second);
     }
 }

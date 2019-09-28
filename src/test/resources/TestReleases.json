@@ -1,0 +1,128 @@
+[
+	{
+		"id": 1,
+		"name": "Name 1",
+		"description": "test",
+		"status": "Created",
+		"releaseDate": "2010-11-20T00:00:00.000+0000",
+		"createdAt": "2009-11-20T00:00:00.000+0000",
+		"lastUpdateAt": "2009-11-20T00:00:00.000+0000"
+	},
+	{
+		"id": 2,
+		"name": "Name 2",
+		"description": "test",
+		"status": "Created",
+		"releaseDate": "2011-11-20T00:00:00.000+0000",
+		"createdAt": "2010-11-20T00:00:00.000+0000",
+		"lastUpdateAt": "2010-11-20T00:00:00.000+0000"
+	},
+	{
+		"id": 3,
+		"name": "Name 3",
+		"description": "test",
+		"status": "On DEV",
+		"releaseDate": "2012-11-20T00:00:00.000+0000",
+		"createdAt": "2011-11-20T00:00:00.000+0000",
+		"lastUpdateAt": "2011-11-20T00:00:00.000+0000"
+	},
+	{
+		"id": 4,
+		"name": "Name 4",
+		"description": "test",
+		"status": "On DEV",
+		"releaseDate": "2012-11-20T00:00:00.000+0000",
+		"createdAt": "2011-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2011-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 5,
+		"name": "Name 5",
+		"description": "test",
+		"status": "On staging",
+		"releaseDate": "2013-11-20T00:00:00.000+0000",
+		"createdAt": "2012-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2012-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 6,
+		"name": "Name 6",
+		"description": "test",
+		"status": "On staging",
+		"releaseDate": "2014-11-20T00:00:00.000+0000",
+		"createdAt": "2012-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2012-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 7,
+		"name": "Name 7",
+		"description": "test",
+		"status": "On staging",
+		"releaseDate": "2015-11-20T00:00:00.000+0000",
+		"createdAt": "2012-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2012-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 8,
+		"name": "Name 8",
+		"description": "test",
+		"status": "On staging",
+		"releaseDate": "2015-11-20T00:00:00.000+0000",
+		"createdAt": "2013-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2013-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 9,
+		"name": "Name 9",
+		"description": "test",
+		"status": "On staging",
+		"releaseDate": "2016-11-20T00:00:00.000+0000",
+		"createdAt": "2014-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2013-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 10,
+		"name": "Name 10",
+		"description": "test",
+		"status": "On PROD",
+		"releaseDate": "2016-11-20T00:00:00.000+0000",
+		"createdAt": "2014-01-20T00:00:00.000+0000",
+		"lastUpdateAt": "2013-01-20T00:00:00.000+0000"
+	},
+	{
+		"id": 11,
+		"name": "Name 11",
+		"description": "test",
+		"status": "On PROD",
+		"releaseDate": "2012-09-27T15:24:17.283+0000",
+		"createdAt": "2011-09-01T15:24:17.283+0000",
+		"lastUpdateAt": "2011-09-01T15:24:17.283+0000"
+	},
+	{
+		"id": 12,
+		"name": "Name 12",
+		"description": "New Release description",
+		"status": "On DEV",
+		"releaseDate": "2019-09-27T15:18:03.563+0000",
+		"createdAt": "2019-02-24T15:18:03.563+0000",
+		"lastUpdateAt": "2019-03-27T15:18:03.563+0000"
+	},
+	{
+		"id": 13,
+		"name": "Name 13",
+		"description": "New Release description",
+		"status": "Created",
+		"releaseDate": "2019-09-20T15:19:58.017+0000",
+		"createdAt": "2019-04-22T15:19:58.017+0000",
+		"lastUpdateAt": "2019-05-02T15:19:58.017+0000"
+	},
+	{
+		"id": 14,
+		"name": "Name 14",
+		"description": "New Release description",
+		"status": "Created",
+		"releaseDate": "2019-09-27T15:24:17.283+0000",
+		"createdAt": "2019-09-20T15:24:17.283+0000",
+		"lastUpdateAt": "2019-09-20T15:24:17.283+0000"
+	}
+]

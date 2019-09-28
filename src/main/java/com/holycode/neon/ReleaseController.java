@@ -7,12 +7,16 @@ import com.holycode.neon.models.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -27,6 +31,7 @@ public class ReleaseController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ReleaseDTO> list(@ModelAttribute ReleaseSearchFilter releaseSearchFilter){
         return releaseService.getReleases(releaseSearchFilter);
+//        return releaseService.getAllReleases();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,21 +65,28 @@ public class ReleaseController {
         if(updated) {
             result = new ResponseEntity<>(new Response("Updated", "Successfully updated release " + release.getId()), HttpStatus.OK);
         } else {
-            result = new ResponseEntity<>(new Response("Not updated", "There was a problem during update of release " + release.getId()), HttpStatus.NOT_FOUND);
+            result = new ResponseEntity<>(new Response("Not updated", "There was a problem during update of release " + release.getId()), HttpStatus.BAD_REQUEST);
         }
         return result;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> delete(@PathVariable String id){
         boolean deleted = releaseService.delete(id);
         ResponseEntity<?> result;
         if(deleted) {
-            result = new ResponseEntity<>(new Response("Deleted", "Successfully deleted release " + id), HttpStatus.OK);
+            result = new ResponseEntity<>(new Response("Deleted", "Successfully deleted release " + id), HttpStatus.ACCEPTED);
         } else {
             result = new ResponseEntity<>(new Response("Not deleted", "There was a problem during deletion of release " + id), HttpStatus.NOT_FOUND);
         }
         return result;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
     public ReleaseService getReleaseService() {
